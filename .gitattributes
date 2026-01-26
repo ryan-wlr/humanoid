@@ -1,0 +1,16 @@
+# Sensible defaults across Windows/WSL/Linux
+* text=auto
+
+# Shell scripts should keep LF endings
+*.sh text eol=lf
+
+# PowerShell scripts can be CRLF
+*.ps1 text eol=crlf
+
+# Batch/CMD can be CRLF
+*.cmd text eol=crlf
+
+# JSON/YAML are fine with LF
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

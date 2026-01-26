@@ -1,0 +1,1349 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Bring up Isaac+WSL stack",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".\\setup_windows\\start_everything.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Bring up Isaac+WSL stack (safe paths)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Bring up Isaac+WSL stack (safe paths)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "PowerShell smoke test",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Write-Output 'hi from powershell'; exit 0"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Bring up Isaac+WSL stack via cmd wrapper",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"./run_start_everything.cmd"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Bring up Isaac+WSL stack via cmd wrapper",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"run_start_everything.cmd"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Bring up Isaac+WSL stack via cmd wrapper (noslash)",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"run_start_everything.cmd"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Bring up Isaac+WSL stack (prints marker)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/run_start_everything_and_print_marker.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL smoke test",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"echo WSL_OK; hostname; hostname -I | head -n 1\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL IP quick test",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"timeout 2s hostname -I 2>/dev/null | tr -s ' ' '\\n' | head -n 1 || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "StartEverything dry run (no launches)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-SkipDiscoveryServer",
+				"-SkipDiffDriveStack",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Task cwd check",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Write-Output ('PWD=' + (Get-Location).Path); Write-Output ('HAS_START_EVERYTHING=' + (Test-Path './setup_windows/start_everything.ps1')); exit 0"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "PS -File smoke test",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/hello.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Bring up Isaac+WSL stack (prints marker) [retry]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/run_start_everything_and_print_marker.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL command quick check",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; echo QUICK_OK\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "StartEverything minimal (WSL discovery only)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-SkipDiffDriveStack",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL IP method test",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"timeout 2s ip -4 -brief addr show | tr -s ' ' | cut -d' ' -f3 | cut -d/ -f1 | head -n 1 || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "StartEverything dry run (manual IP)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-SkipDiscoveryServer",
+				"-SkipDiffDriveStack",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Option 1: start_everything (auto WSL IP)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ip -brief test",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- ip -4 -brief addr show"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL bash ip test",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"ip -4 -brief addr show | head -n 5\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Option 1: start_everything (force localhost DS)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Option 1: start_everything (force localhost DS) [retry2]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Option 1: start_everything (force localhost DS) [retry3]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL check fast-discovery-server exists",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"if [ -x /opt/ros/jazzy/bin/fast-discovery-server ]; then echo HAS_FAST_DS; else echo NO_FAST_DS; fi\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL check nohup exists",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"command -v nohup && echo HAS_NOHUP\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Debug WSL discovery server command",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/test_wsl_discovery_server_cmd.ps1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Option 1: start_everything (force localhost DS) [retry4]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Option 1: start_everything (force localhost DS) [retry5]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "StartEverything step1 debug",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-SkipDiffDriveStack",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "StartEverything step1 debug (retry)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-SkipDiffDriveStack",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "StartEverything step1 debug (retry2)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-SkipDiffDriveStack",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Option 1: start_everything (force localhost DS) [final]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Stop Isaac Sim (kit.exe)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Get-Process -Id 44132 -ErrorAction SilentlyContinue | Stop-Process -Force; Get-Process kit -ErrorAction SilentlyContinue | Select-Object -First 5 Id,ProcessName"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Restart Isaac Sim with black-screen fix",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-FixBlackViewport",
+				"-ResetKitUserConfig"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "WSL ROS2: env + topic list",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; source /opt/ros/jazzy/setup.bash; echo '--- ROS env ---'; echo ROS_DOMAIN_ID=$ROS_DOMAIN_ID; echo ROS_DISCOVERY_SERVER=$ROS_DISCOVERY_SERVER; echo ROS_LOCALHOST_ONLY=$ROS_LOCALHOST_ONLY; echo RMW_IMPLEMENTATION=$RMW_IMPLEMENTATION; echo FASTDDS_BUILTIN_TRANSPORTS=$FASTDDS_BUILTIN_TRANSPORTS; echo '--- topics (first 80) ---'; ros2 topic list -t | head -n 80\""
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "WSL: discovery server process",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; echo '--- fast discovery server ps ---'; ps -ef | grep -E 'fast-discovery-server|fastdds' | grep -v grep || true; echo '--- udp 11812 listeners ---'; (command -v ss >/dev/null 2>&1 && ss -lunp | grep ':11812' || true)\""
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "WSL ROS2 check (no-quote issues)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/wsl_ros2_check.ps1",
+				"-WslDistro",
+				"Ubuntu-24.04",
+				"-RosDistro",
+				"jazzy"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (no-quote issues)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/wsl_ros2_check.ps1",
+				"-WslDistro",
+				"Ubuntu-24.04",
+				"-RosDistro",
+				"jazzy"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (no-quote issues)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/wsl_ros2_check.ps1",
+				"-WslDistro",
+				"Ubuntu-24.04",
+				"-RosDistro",
+				"jazzy"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (with discovery server env)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/wsl_ros2_check.ps1",
+				"-WslDistro",
+				"Ubuntu-24.04",
+				"-RosDistro",
+				"jazzy",
+				"-DomainId",
+				"0",
+				"-DiscoveryServer",
+				"127.0.0.1:11812"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (script file)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; SCRIPT=/mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh; chmod +x $SCRIPT; $SCRIPT 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (script file) [retry]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (script file) [retry2]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (script file) [retry3 w/ timeouts]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL stack status + logs",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/98_stack_status.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/98_stack_status.sh\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Restart diff_drive stack (WSL background)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; nohup /mnt/c/Users/ryan_/Documents/github/ros2_ws/run_diff_drive_stack.sh --force-x11 --reset-gui --no-rviz >$HOME/.ros2ws_diff_drive_stack.log 2>&1 & echo STARTED_PID=$!; sleep 1; tail -n 30 $HOME/.ros2ws_diff_drive_stack.log || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Restart diff_drive stack (WSL background) [safe]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; nohup /mnt/c/Users/ryan_/Documents/github/ros2_ws/run_diff_drive_stack.sh --force-x11 --reset-gui --no-rviz >~/.ros2ws_diff_drive_stack.log & sleep 1; tail -n 60 ~/.ros2ws_diff_drive_stack.log || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL stack status + logs [after restart]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/98_stack_status.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/98_stack_status.sh\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (after stack restart)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Restart diff_drive via start_everything (WSL only, sets DS env)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (after DS-env restart)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL ROS2 check (forced timeouts)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/99_ros2_check.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Capture WSL ROS2 graph to file",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check captured graph file size",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$p = '.\\setup_wsl\\wsl_ros2_graph.txt'; if (Test-Path $p) { Get-Item $p | Select-Object FullName,Length,LastWriteTime; Write-Host '--- tail ---'; Get-Content $p -Tail 40 } else { Write-Host 'missing file' }"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Capture WSL ROS2 graph to file [no daemon]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL check timeout command",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"command -v timeout || echo NO_TIMEOUT\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL check for stuck ros2 cli",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"ps -ef | grep -E 'ros2 (node|topic) list' | grep -v grep || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL check for stuck ros2 processes (no regex)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"ps -ef | grep ros2 | grep list | grep -v grep || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL kill stuck ros2cli processes",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"pkill -f '/opt/ros/jazzy/bin/ros2' || true; pkill -f ros2-daemon || true; ps -ef | grep ros2 | grep list | grep -v grep || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL check stuck ros2 after kill",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"ps -ef | grep ros2 | grep list | grep -v grep || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL kill stuck ros2 PID 1844",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"kill -9 1844 || true; ps -ef | grep ros2 | grep list | grep -v grep || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL check PID 1844 exists",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"ps -p 1844 -o pid,cmd || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL shutdown (clears stuck ros2)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe --shutdown"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Restart WSL discovery+stack (no Isaac)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL quick ping",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"echo WSL_UP\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Restart WSL discovery+stack (no Isaac) [explicit DS]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-SkipIsaacSim"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Capture WSL ROS2 graph to file [post-restart]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "WSL check ros2 list processes",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"ps -ef | grep /opt/ros/jazzy/bin/ros2 | grep list | grep -v grep || true\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Get WSL IP",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/get_wsl_ip.ps1",
+				"-WslDistro",
+				"Ubuntu-24.04"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Stop Isaac Sim (all kit.exe)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Get-Process kit -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 1; Get-Process kit -ErrorAction SilentlyContinue | Select-Object -First 5 Id,ProcessName"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Launch Isaac Sim (DS=WSL IP)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/launch_isaac_sim_with_ros2.ps1",
+				"-Mode",
+				"kit",
+				"-AppKit",
+				"isaacsim.exp.base.kit",
+				"-RosDistro",
+				"jazzy",
+				"-DomainId",
+				"0",
+				"-DiscoveryServer",
+				"192.168.1.200:11812",
+				"-FixBlackViewport",
+				"-Detach"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Kill any running kit.exe",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Get-Process kit -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Milliseconds 300; Get-Process kit -ErrorAction SilentlyContinue | Select-Object -First 5 Id,ProcessName"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Relaunch Isaac Sim (Full) with black-screen fixes",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"./setup_windows/start_everything.ps1",
+				"-DiscoveryServerIp",
+				"127.0.0.1",
+				"-IsaacAppKit",
+				"isaacsim.exp.full.kit",
+				"-FixBlackViewport",
+				"-ResetKitUserConfig",
+				"-OpenRoboticsExamples"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Capture WSL ROS2 graph (DS=127.0.0.1)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh 0 127.0.0.1:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Capture WSL ROS2 graph (DS=WSL IP)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"wsl.exe -d Ubuntu-24.04 -- bash -lc \"set -e; chmod +x /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh; /mnt/c/Users/ryan_/Documents/github/ros2_ws/setup_wsl/97_capture_ros2_graph.sh 0 192.168.1.200:11812 jazzy\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Stop Isaac Sim (kit.exe)",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Get-Process kit -ErrorAction SilentlyContinue | Stop-Process -Force"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Relaunch Isaac Sim (Full) with black-screen fixes",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".\\setup_windows\\start_everything_windows.ps1",
+				"-IsaacRoot",
+				"C:\\isaacsim",
+				"-IsaacAppKit",
+				"isaacsim.exp.full.kit",
+				"-IsaacRosDistro",
+				"jazzy",
+				"-DomainId",
+				"0",
+				"-FixBlackViewport",
+				"-ResetKitUserConfig",
+				"-OpenRoboticsExamples"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Stop Isaac Sim (kit.exe) [clean]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Get-Process kit -ErrorAction SilentlyContinue | Stop-Process -Force"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Relaunch Isaac Sim (Full) + reset config + present",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".\\setup_windows\\start_everything_windows.ps1",
+				"-IsaacRoot",
+				"C:\\isaacsim",
+				"-IsaacAppKit",
+				"isaacsim.exp.full.kit",
+				"-IsaacRosDistro",
+				"jazzy",
+				"-DomainId",
+				"0",
+				"-FixBlackViewport",
+				"-ResetKitUserConfig",
+				"-OpenRoboticsExamples"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Relaunch Isaac Sim (Full) + reset config + present [absolute]",
+			"type": "shell",
+			"command": "powershell.exe",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"C:\\Users\\ryan_\\Documents\\github\\ros2_ws\\setup_windows\\start_everything_windows.ps1",
+				"-IsaacRoot",
+				"C:\\isaacsim",
+				"-IsaacAppKit",
+				"isaacsim.exp.full.kit",
+				"-IsaacRosDistro",
+				"jazzy",
+				"-DomainId",
+				"0",
+				"-FixBlackViewport",
+				"-ResetKitUserConfig",
+				"-OpenRoboticsExamples"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "git status (no pager)",
+			"type": "shell",
+			"command": "git -c core.pager=cat status --porcelain=v2 -b",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "git cherry-pick state",
+			"type": "shell",
+			"command": "git rev-parse --verify CHERRY_PICK_HEAD ; if ($LASTEXITCODE -ne 0) { echo 'NO_CHERRY_PICK' }",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "git unmerged files",
+			"type": "shell",
+			"command": "git -c core.pager=cat diff --name-only --diff-filter=U",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "git add all (pre-continue)",
+			"type": "shell",
+			"command": "git add -A",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

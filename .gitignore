@@ -1,0 +1,58 @@
+# ROS 2 / colcon workspace artifacts
+build/
+install/
+log/
+
+# colcon / ament
+.colcon/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# VS Code (keep useful shared config by default)
+# If you want to ignore all VS Code files, uncomment the next line:
+# .vscode/
+
+# Local envs
+.venv/
+venv/
+.env
+
+# Logs/output produced by helper scripts in this repo
+setup_windows/*.out.txt
+setup_windows/*.err.txt
+setup_windows/*.pid.txt
+setup_windows/*.last_run.txt
+setup_windows/*.status.txt
+setup_wsl/wsl_ros2_graph.txt
+
+# Fast DDS discovery server state (generated)
+server-*_reader.db
+server-*_writer.db
+
+# Downloaded robot assets (keep repo lightweight)
+assets/unitree_g1/vendor/
+assets/unitree_g1/unitree_g1_usd_path.txt
+assets/unitree_g1/g1.usd
+assets/unitree_g1/*.usda
+assets/unitree_g1/*.usdc
+assets/unitree_g1/*.usd
+
+# Downloaded OpenUSD Kitchen Set (large)
+assets/kitchen_set/Kitchen_set.zip
+assets/kitchen_set/Kitchen_set/
+assets/kitchen_set/kitchen_set_usd_path.txt
+
+# Docker runtime junk
+**/.docker/

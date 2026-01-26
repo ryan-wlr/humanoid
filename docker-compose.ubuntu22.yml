@@ -1,0 +1,37 @@
+services:
+  isaac:
+    build:
+      context: ./docker/isaac_sim_lab_ros2
+      args:
+        ISAAC_SIM_BASE_IMAGE: ${ISAAC_SIM_BASE_IMAGE}
+    image: isaac-sim-lab-ros2:local
+    container_name: isaac-sim-lab-ros2
+
+    # Best chance for ROS2 DDS + performance on a single Ubuntu host
+    network_mode: host
+    ipc: host
+
+    # Avoid shared-memory crashes (Omniverse / PhysX can be shm-hungry)
+    shm_size: "8gb"
+
+    # GPU access (requires NVIDIA Container Toolkit)
+    gpus: all
+
+    environment:
+      - DISPLAY=${DISPLAY}
+      - XAUTHORITY=${XAUTHORITY}
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${XAUTHORITY:-$HOME/.Xauthority}:${XAUTHORITY:-/root/.Xauthority}:rw
+      - ./:/workspace:rw
+
+    ulimits:
+      nofile:
+        soft: 1048576
+        hard: 1048576
+
+    # Isaac Sim images are large; keep container running for shells
+    tty: true
+    stdin_open: true
