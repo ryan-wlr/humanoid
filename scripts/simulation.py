@@ -102,17 +102,27 @@ class AppleGrabbingSimulation:
         except Exception as e:
             carb.log_warn(f"Could not load robot model: {e}")
             carb.log_warn("Using placeholder robot representation")
+            # Create a simple placeholder since no robot model is available
+            # In production, this should fail gracefully or require a valid model
+            self.robot = None
             
         print("Robot loaded!")
         
     def initialize_controller(self):
         """Initialize the robot controller."""
         if self.robot:
-            self.controller = UnitreeG1Controller(
-                robot=self.robot,
-                target_position=self.apple.get_world_pose()[0]
-            )
-            print("Controller initialized!")
+            try:
+                target_pos = self.apple.get_world_pose()[0]
+                self.controller = UnitreeG1Controller(
+                    robot=self.robot,
+                    target_position=target_pos
+                )
+                print("Controller initialized!")
+            except (AttributeError, RuntimeError) as e:
+                carb.log_error(f"Failed to initialize controller: {e}")
+                self.controller = None
+        else:
+            carb.log_warn("No robot available, skipping controller initialization")
         
     def run(self):
         """Run the simulation."""

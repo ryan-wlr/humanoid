@@ -106,8 +106,8 @@ class UnitreeG1Controller:
         if self.initial_positions is None:
             try:
                 self.initial_positions = self.robot.get_joint_positions()
-            except:
-                pass
+            except (AttributeError, RuntimeError) as e:
+                print(f"Warning: Could not get initial joint positions: {e}")
         
     def transition_to_grasping(self):
         """Transition to grasping state."""
@@ -165,7 +165,7 @@ class UnitreeG1Controller:
             action = ArticulationAction(joint_positions=target_joint_positions)
             self.robot.apply_action(action)
             
-        except Exception as e:
+        except (AttributeError, RuntimeError, ValueError) as e:
             print(f"Error in approach_target: {e}")
         
     def grasp_object(self, dt):
@@ -195,7 +195,7 @@ class UnitreeG1Controller:
             action = ArticulationAction(joint_positions=target_positions)
             self.robot.apply_action(action)
             
-        except Exception as e:
+        except (AttributeError, RuntimeError, ValueError) as e:
             print(f"Error in grasp_object: {e}")
         
     def lift_object(self, dt):
@@ -222,7 +222,7 @@ class UnitreeG1Controller:
             action = ArticulationAction(joint_positions=target_positions)
             self.robot.apply_action(action)
             
-        except Exception as e:
+        except (AttributeError, RuntimeError, ValueError) as e:
             print(f"Error in lift_object: {e}")
         
     def retract_arm(self, dt):
@@ -247,5 +247,5 @@ class UnitreeG1Controller:
             action = ArticulationAction(joint_positions=target_positions)
             self.robot.apply_action(action)
             
-        except Exception as e:
+        except (AttributeError, RuntimeError, ValueError) as e:
             print(f"Error in retract_arm: {e}")

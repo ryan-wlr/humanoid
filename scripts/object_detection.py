@@ -45,7 +45,7 @@ class AppleDetector:
             self.last_position = position
             
             return position, True
-        except Exception as e:
+        except (AttributeError, RuntimeError, TypeError) as e:
             print(f"Detection error: {e}")
             return None, False
     

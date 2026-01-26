@@ -32,12 +32,6 @@ def main():
         action="store_true",
         help="Run simulation in headless mode (no GUI)",
     )
-    parser.add_argument(
-        "--config",
-        type=str,
-        default="../config/scene_config.yaml",
-        help="Path to scene configuration file",
-    )
     
     args = parser.parse_args()
     
@@ -47,7 +41,6 @@ def main():
     print()
     print("Launching Isaac Sim...")
     print(f"Headless mode: {args.headless}")
-    print(f"Config file: {args.config}")
     print()
     
     # Import and run simulation
