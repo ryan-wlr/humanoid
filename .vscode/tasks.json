@@ -1344,6 +1344,27 @@
 			"command": "git add -A",
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "git status clean check",
+			"type": "shell",
+			"command": "git -c core.pager=cat status -sb",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "git commit tasks.json fixup",
+			"type": "shell",
+			"command": "git add .vscode/tasks.json && git commit -m \"fix: remove accidental tasks.json diff task\"",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "git add tasks.json",
+			"type": "shell",
+			"command": "git add .vscode/tasks.json",
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }
