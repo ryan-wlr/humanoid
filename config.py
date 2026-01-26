@@ -154,7 +154,7 @@ def print_config():
     
     print("\n🍎 OBJECTS")
     apple = OBJECTS['apple']
-    print(f"  Apple: {apple['mass']} kg, {apple['radius']*200:.0f} cm diameter")
+    print(f"  Apple: {apple['mass']} kg, {apple['radius']*2*100:.1f} cm diameter")
     desk = OBJECTS['desk']
     print(f"  Desk: {desk['mass']} kg, {desk['width']}×{desk['depth']}×{desk['height']} m")
     

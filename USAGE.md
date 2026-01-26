@@ -116,9 +116,11 @@ if self.state_time > 2.0:  # Adjust timing (seconds)
 - Verify asset paths in Isaac Sim settings
 
 ### Robot model not loading
-- The simulation uses Franka arm as a placeholder
-- For actual Unitree G1 model, replace asset path in `load_robot()`
-- Contact Unitree for official G1 USD model
+- The simulation uses Franka arm as a placeholder for demonstration purposes
+- The realistic physics/control principles apply regardless of the robot model
+- For actual Unitree G1 model, replace asset path in `load_robot()` method
+- Contact Unitree Robotics (https://www.unitree.com/) for official G1 USD model
+- All realistic parameters (joint damping, stiffness, force control) are designed for humanoid robots
 
 ### Simulation runs slowly
 - Reduce rendering quality in Isaac Sim settings

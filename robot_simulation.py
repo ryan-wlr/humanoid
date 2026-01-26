@@ -114,6 +114,9 @@ class RealisticHumanoidSimulation:
         # Position apple on desk surface
         apple_height = self.grasp_height
         
+        # NOTE: Using DynamicCuboid as a placeholder. In production with Isaac Sim,
+        # use DynamicSphere or import an actual apple mesh/USD for visual realism.
+        # The physics properties (mass, friction) remain realistic.
         self.apple = self.world.scene.add(
             DynamicCuboid(  # Using cuboid as sphere placeholder
                 prim_path="/World/Apple",
@@ -135,8 +138,12 @@ class RealisticHumanoidSimulation:
         """Load the Unitree G1 humanoid robot with realistic joint limits and dynamics."""
         print("Loading Unitree G1 humanoid robot...")
         
-        # In a real implementation, this would load the actual Unitree G1 USD asset
-        # For now, we'll create a simple articulated robot representation
+        # NOTE: This implementation uses a Franka arm as a PLACEHOLDER for demonstration.
+        # In a production environment, this should be replaced with the actual Unitree G1 USD model.
+        # The Franka arm is used here to demonstrate the simulation framework and realistic
+        # physics/control principles. All the realistic parameters (joint damping, stiffness,
+        # force control) would apply to the actual Unitree G1 model once available.
+        # Contact Unitree Robotics for the official G1 USD asset.
         
         # Get assets root path
         assets_root_path = get_assets_root_path()
