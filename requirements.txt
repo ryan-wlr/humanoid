@@ -1,0 +1,11 @@
+# Requirements for Unitree G1 Humanoid Robot Simulation
+# This simulation requires NVIDIA Isaac Sim to be installed separately
+# Isaac Sim download: https://developer.nvidia.com/isaac-sim
+
+# Core dependencies (included with Isaac Sim)
+# omni.isaac.kit
+# omni.isaac.core
+# omni.isaac.nucleus
+
+# Additional Python packages
+numpy>=1.21.0
