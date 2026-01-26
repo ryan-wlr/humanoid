@@ -162,7 +162,8 @@ def print_config():
     print(f"  Approach: {BEHAVIOR['approach_duration']} s")
     print(f"  Grasp: {BEHAVIOR['grasp_duration']} s")
     print(f"  Lift: {BEHAVIOR['lift_duration']} s")
-    print(f"  Total time: {sum([BEHAVIOR['approach_duration'], BEHAVIOR['grasp_duration'], BEHAVIOR['lift_duration']])} s")
+    total_time = sum([BEHAVIOR[k] for k in ['approach_duration', 'grasp_duration', 'lift_duration']])
+    print(f"  Total time: {total_time} s")
     
     print("\n" + "=" * 70)
     

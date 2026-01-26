@@ -55,9 +55,15 @@ class MockSimulation:
         max_vel = ROBOT['max_velocity']
         time_needed = distance / max_vel
         
-        # Add acceleration/deceleration time
-        accel_time = max_vel / ROBOT['max_acceleration']
-        total_time = time_needed + accel_time
+        # Add acceleration/deceleration time (with validation)
+        max_accel = ROBOT['max_acceleration']
+        if max_accel > 0:
+            accel_time = max_vel / max_accel
+            total_time = time_needed + accel_time
+        else:
+            # If no acceleration limit, use time_needed only
+            accel_time = 0
+            total_time = time_needed
         
         print(f"  Start: [{start[0]:.2f}, {start[1]:.2f}, {start[2]:.2f}] m")
         print(f"  Target: [{target[0]:.2f}, {target[1]:.2f}, {target[2]:.2f}] m")

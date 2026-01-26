@@ -21,6 +21,19 @@ from omni.isaac.core.utils.types import ArticulationAction
 from pxr import Gf, UsdGeom, UsdPhysics
 import carb
 
+# Try to import configuration, fall back to defaults if not available
+try:
+    from config import PHYSICS, ROBOT, OBJECTS, BEHAVIOR
+    USE_CONFIG = True
+except ImportError:
+    USE_CONFIG = False
+    # Default values if config not available
+    PHYSICS = {"gravity": -9.81, "time_step": 1.0/60.0}
+    ROBOT = {"grasp_force": 50.0}
+    OBJECTS = {"apple": {"position": [0.8, 0.0, 0.85], "radius": 0.04, "mass": 0.2},
+               "desk": {"width": 1.2, "depth": 0.8, "height": 0.75, "mass": 20.0}}
+    BEHAVIOR = {"approach_offset": 0.15}
+
 
 class RealisticHumanoidSimulation:
     """
@@ -35,14 +48,17 @@ class RealisticHumanoidSimulation:
         self.apple = None
         self.desk = None
         
-        # Realistic physics parameters
-        self.gravity = -9.81  # Earth gravity in m/s^2
-        self.time_step = 1.0/60.0  # 60 Hz simulation
+        # Realistic physics parameters from config
+        self.gravity = PHYSICS['gravity']
+        self.time_step = PHYSICS['time_step']
         
-        # Motion planning parameters
-        self.grasp_height = 0.85  # Height of apple on desk
-        self.approach_offset = 0.15  # Distance to approach before grasping
-        self.grasp_force = 50.0  # Realistic gripper force in Newtons
+        # Motion planning parameters from config
+        # Calculate grasp height based on desk height and apple position
+        desk_height = OBJECTS['desk']['height']
+        apple_z = OBJECTS['apple']['position'][2]
+        self.grasp_height = apple_z  # Apple is positioned at this height
+        self.approach_offset = BEHAVIOR['approach_offset']
+        self.grasp_force = ROBOT['grasp_force']
         
         # State machine for realistic behavior
         self.state = "init"
@@ -78,20 +94,23 @@ class RealisticHumanoidSimulation:
         
     def create_desk(self):
         """Create a realistic desk with proper dimensions and material properties."""
-        # Standard desk dimensions (in meters)
-        desk_width = 1.2
-        desk_depth = 0.8
-        desk_height = 0.75
-        desk_thickness = 0.05
+        # Get desk dimensions from config
+        desk_config = OBJECTS['desk']
+        desk_width = desk_config['width']
+        desk_depth = desk_config['depth']
+        desk_height = desk_config['height']
+        desk_mass = desk_config['mass']
+        desk_color = desk_config.get('color', [0.6, 0.4, 0.2])
+        desk_position = desk_config.get('position', [0.8, 0.0, desk_height/2])
         
         self.desk = self.world.scene.add(
             DynamicCuboid(
                 prim_path="/World/Desk",
                 name="desk",
-                position=np.array([0.8, 0.0, desk_height/2]),
+                position=np.array(desk_position),
                 scale=np.array([desk_width, desk_depth, desk_height]),
-                color=np.array([0.6, 0.4, 0.2]),  # Brown wood color
-                mass=20.0,  # Realistic desk mass in kg
+                color=np.array(desk_color),  # Brown wood color
+                mass=desk_mass,  # Realistic desk mass in kg
                 linear_velocity=np.array([0, 0, 0]),
             )
         )
@@ -107,12 +126,12 @@ class RealisticHumanoidSimulation:
             
     def create_apple(self):
         """Create a realistic apple with proper size, mass, and material properties."""
-        # Realistic apple properties
-        apple_radius = 0.04  # ~8cm diameter apple
-        apple_mass = 0.2  # Average apple mass in kg
-        
-        # Position apple on desk surface
-        apple_height = self.grasp_height
+        # Get apple properties from config
+        apple_config = OBJECTS['apple']
+        apple_radius = apple_config['radius']
+        apple_mass = apple_config['mass']
+        apple_color = apple_config.get('color', [0.8, 0.1, 0.1])
+        apple_position = apple_config['position']
         
         # NOTE: Using DynamicCuboid as a placeholder. In production with Isaac Sim,
         # use DynamicSphere or import an actual apple mesh/USD for visual realism.
@@ -121,9 +140,9 @@ class RealisticHumanoidSimulation:
             DynamicCuboid(  # Using cuboid as sphere placeholder
                 prim_path="/World/Apple",
                 name="apple",
-                position=np.array([0.8, 0.0, apple_height]),
+                position=np.array(apple_position),
                 scale=np.array([apple_radius*2, apple_radius*2, apple_radius*2]),
-                color=np.array([0.8, 0.1, 0.1]),  # Red apple color
+                color=np.array(apple_color),  # Red apple color
                 mass=apple_mass,
                 linear_velocity=np.array([0, 0, 0]),
             )

@@ -33,7 +33,7 @@ This simulation implements a highly realistic robotic system with the following 
 ```bash
 # Install NVIDIA Isaac Sim first
 # Then run:
-./isaac_sim_python.sh robot_simulation.py
+./python.sh robot_simulation.py
 ```
 
 See [USAGE.md](USAGE.md) for detailed installation and usage instructions.
