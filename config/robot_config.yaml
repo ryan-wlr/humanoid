@@ -1,0 +1,35 @@
+# Unitree G1 Robot Configuration
+# This file contains parameters for the Unitree G1 robot
+
+robot:
+  name: "Unitree_G1"
+  type: "humanoid"
+  
+  # Robot dimensions (approximate)
+  height: 1.27  # meters
+  weight: 35.0  # kg
+  
+  # Arm configuration
+  arm:
+    dof: 7  # Degrees of freedom per arm
+    max_reach: 0.8  # meters
+    
+  # Gripper configuration
+  gripper:
+    type: "parallel"
+    max_width: 0.08  # meters
+    grasp_force: 50.0  # Newtons
+    
+  # Control parameters
+  control:
+    position_gain: 100.0
+    velocity_gain: 10.0
+    max_velocity: 1.0  # rad/s
+    max_acceleration: 5.0  # rad/s^2
+
+# Initial pose (joint angles in radians)
+initial_pose:
+  torso: [0.0, 0.0, 0.0]
+  left_arm: [0.0, -0.5, 0.0, 1.0, 0.0, 0.5, 0.0]
+  right_arm: [0.0, -0.5, 0.0, 1.0, 0.0, 0.5, 0.0]
+  gripper: [0.04, 0.04]  # Open position

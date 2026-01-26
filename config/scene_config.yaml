@@ -1,0 +1,36 @@
+# Scene Configuration for Apple Grabbing Task
+
+scene:
+  name: "Apple_Grabbing_Scene"
+  
+  # Desk configuration
+  desk:
+    position: [0.6, 0.0, 0.4]  # x, y, z in meters
+    size: [0.8, 1.2, 0.02]  # width, depth, height
+    color: [0.5, 0.35, 0.2]  # RGB (brown)
+    mass: 50.0  # kg
+    
+  # Apple configuration
+  apple:
+    position: [0.6, 0.2, 0.45]  # On desk surface
+    radius: 0.04  # meters (8cm diameter)
+    color: [0.8, 0.1, 0.1]  # RGB (red)
+    mass: 0.2  # kg
+    
+  # Robot placement
+  robot:
+    position: [0.0, 0.0, 0.0]  # Base position
+    orientation: [0.0, 0.0, 0.0]  # Roll, pitch, yaw in radians
+    
+  # Camera configuration
+  camera:
+    position: [1.5, 1.5, 1.2]  # Viewing angle
+    target: [0.5, 0.0, 0.5]  # Look at point
+    
+  # Lighting
+  lighting:
+    ambient: 0.3
+    key_light:
+      intensity: 1000.0
+      position: [2.0, 2.0, 3.0]
+      color: [1.0, 1.0, 0.9]  # Slightly warm
