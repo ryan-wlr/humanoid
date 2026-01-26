@@ -29,6 +29,7 @@ class MockSimulation:
         
         # Object states
         self.apple_position = np.array(OBJECTS['apple']['position'])
+        self.apple_velocity = np.array([0.0, 0.0, 0.0])  # Track velocity for physics
         self.apple_grasped = False
         
         print("✓ Mock simulation initialized")
@@ -122,19 +123,28 @@ class MockSimulation:
         # If apple is grasped, it moves with gripper
         if self.apple_grasped:
             self.apple_position = self.robot_position.copy()
+            self.apple_velocity = np.array([0.0, 0.0, 0.0])
         else:
             # Apple affected by gravity if not supported
             if self.apple_position[2] > OBJECTS['desk']['height']:
-                # Apply gravity
-                velocity = PHYSICS['gravity'] * dt
-                self.apple_position[2] += velocity * dt
+                # Apply gravity using kinematic equations
+                # v = v0 + a*dt
+                # x = x0 + v0*dt + 0.5*a*dt^2
+                acceleration = np.array([0.0, 0.0, PHYSICS['gravity']])
+                
+                # Update position using kinematic equation
+                self.apple_position += self.apple_velocity * dt + 0.5 * acceleration * dt * dt
+                
+                # Update velocity
+                self.apple_velocity += acceleration * dt
                 
                 # Collision with desk
                 if self.apple_position[2] <= OBJECTS['desk']['height']:
                     self.apple_position[2] = OBJECTS['desk']['height']
                     # Apply restitution (bounce)
                     bounce = PHYSICS['ground_restitution']
-                    print(f"  Apple landed on desk (bounce: {bounce})")
+                    self.apple_velocity[2] = -self.apple_velocity[2] * bounce
+                    print(f"  Apple landed on desk (bounce coefficient: {bounce})")
                     
     def run_simulation(self):
         """Run the mock simulation to demonstrate realistic behavior."""
