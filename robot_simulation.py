@@ -200,12 +200,19 @@ class RealisticHumanoidSimulation:
             return
             
         # Realistic joint properties for smooth, human-like motion
-        joint_damping = 10.0  # Newton-meters-second
-        joint_stiffness = 100.0  # Newton-meters/radian
+        # These values are from config and would be applied to robot joints in production
+        joint_damping = ROBOT.get('joint_damping', 10.0)  # Newton-meters-second
+        joint_stiffness = ROBOT.get('joint_stiffness', 100.0)  # Newton-meters/radian
         
         print("Configuring realistic robot dynamics...")
         print(f"  - Joint damping: {joint_damping} Nm·s")
         print(f"  - Joint stiffness: {joint_stiffness} Nm/rad")
+        
+        # NOTE: In production, apply these values to robot joints using Isaac Sim APIs:
+        # for i, dof in enumerate(self.robot.get_dof_names()):
+        #     self.robot.set_joint_damping(dof, joint_damping)
+        #     self.robot.set_joint_stiffness(dof, joint_stiffness)
+        # Since we're using a placeholder model, we document the values for reference.
         
     def setup_lighting(self):
         """Set up realistic lighting for the scene."""
