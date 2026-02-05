@@ -1,0 +1,6 @@
+# Isaac Sim dependencies
+# Note: Isaac Sim should be installed via Omniverse Launcher
+# These are additional Python packages needed for the simulation
+
+numpy>=1.21.0
+scipy>=1.7.0
