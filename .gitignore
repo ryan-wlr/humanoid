@@ -1,0 +1,9 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Isaac Sim diagnostic output
+*.log
+scripts/*_debug.txt
+scripts/*_probe.txt
+scripts/*_list.txt
