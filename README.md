@@ -7,6 +7,8 @@ including inverse kinematics for the right arm.
 
 ## Demo
 
+[Watch the pickup animation on YouTube](https://www.youtube.com/watch?v=Z3F4pRSmpHE).
+
 [Download the rendered pickup animation](docs/output/nova_carter_desk_apple.mp4).
 
 ## Prerequisites
