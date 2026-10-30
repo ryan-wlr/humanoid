@@ -6,7 +6,9 @@ the right arm and writes the resulting link transforms as USD time samples. The
 physics simulation is not needed, so the result plays back identically on the
 timeline and in video capture.
 """
+import json
 import math
+import os
 
 import numpy as np
 from pxr import Gf, Usd, UsdGeom, UsdPhysics
@@ -17,9 +19,11 @@ PRE_FRAME = 150
 GRASP_FRAME = 175
 ATTACH_FRAME = 197
 LIFT_FRAME = 228
-END_FRAME = 400
-TURN_START = 236
-TURN_END = 276
+PLACE_FRAME = 285
+RELEASE_FRAME = 307
+END_FRAME = 455
+TURN_START = 340
+TURN_END = 380
 AWAY_DIST = 1.5
 
 START_X = -1.95
@@ -32,6 +36,25 @@ ARM_JOINTS = [
     "right_elbow_joint", "right_wrist_roll_joint", "right_wrist_pitch_joint",
     "right_wrist_yaw_joint",
 ]
+GROOT_FULL_BODY_JOINT_ORDER = (
+    "left_hip_pitch_joint", "left_hip_roll_joint", "left_hip_yaw_joint",
+    "left_knee_joint", "left_ankle_pitch_joint", "left_ankle_roll_joint",
+    "right_hip_pitch_joint", "right_hip_roll_joint", "right_hip_yaw_joint",
+    "right_knee_joint", "right_ankle_pitch_joint", "right_ankle_roll_joint",
+    "waist_pitch_joint", "waist_roll_joint", "waist_yaw_joint",
+    "left_shoulder_pitch_joint", "left_shoulder_roll_joint", "left_shoulder_yaw_joint",
+    "left_elbow_joint", "left_wrist_roll_joint", "left_wrist_pitch_joint",
+    "left_wrist_yaw_joint",
+    "left_hand_index_0_joint", "left_hand_index_1_joint", "left_hand_middle_0_joint",
+    "left_hand_middle_1_joint", "left_hand_thumb_0_joint", "left_hand_thumb_1_joint",
+    "left_hand_thumb_2_joint",
+    "right_shoulder_pitch_joint", "right_shoulder_roll_joint", "right_shoulder_yaw_joint",
+    "right_elbow_joint", "right_wrist_roll_joint", "right_wrist_pitch_joint",
+    "right_wrist_yaw_joint",
+    "right_hand_index_0_joint", "right_hand_index_1_joint", "right_hand_middle_0_joint",
+    "right_hand_middle_1_joint", "right_hand_thumb_0_joint", "right_hand_thumb_1_joint",
+    "right_hand_thumb_2_joint",
+)
 IK_JOINTS = ["waist_pitch_joint"] + ARM_JOINTS
 READY = {
     "waist_pitch_joint": 0.0, "right_shoulder_pitch_joint": 0.0,
@@ -87,11 +110,14 @@ class _Joint:
 
 
 class G1PickupAnimation:
-    def __init__(self, stage, g1_prim, apple_prim, apple_rest, log=print):
+    def __init__(self, stage, g1_prim, apple_prim, apple_rest, drop_position=None, log=print):
         self.stage = stage
         self.g1_prim = g1_prim
         self.apple_prim = apple_prim
         self.apple_rest = np.array(apple_rest, dtype=float)
+        self.drop_position = np.array(
+            drop_position if drop_position is not None else apple_rest, dtype=float
+        )
         self.log = log
         self._read_rig()
         self._calibrate()
@@ -320,12 +346,19 @@ class G1PickupAnimation:
         warm = [x_grasp]
         x_pre, _ = self.solve_ik(apple + np.array([-0.12, 0.0, 0.14]), f_t, c_t, warm)
         x_lift, _ = self.solve_ik(apple + np.array([-0.10, 0.02, 0.24]), f_t, c_t, warm)
+        x_place, _ = self.solve_ik(
+            self.drop_position + np.array([-0.06, 0.0, 0.18]), f_t, c_t, warm
+        )
+        x_release, _ = self.solve_ik(
+            self.drop_position + np.array([-0.04, 0.0, 0.07]), f_t, c_t, [x_place]
+        )
         err_g = np.linalg.norm(self._palm_state(self._q_from(x_grasp))[0] - apple)
         self.log(f"Grasp IK position error: {err_g * 1000:.1f} mm")
         x_ready = np.array([READY[n] for n in names])
         self.waypoints = [
             (WALK_FRAMES, x_ready), (PRE_FRAME, x_pre), (GRASP_FRAME, x_grasp),
-            (ATTACH_FRAME, x_grasp), (LIFT_FRAME, x_lift),
+            (ATTACH_FRAME, x_grasp), (LIFT_FRAME, x_lift), (PLACE_FRAME, x_place),
+            (RELEASE_FRAME, x_release),
         ]
 
     def _q_from(self, x):
@@ -349,7 +382,9 @@ class G1PickupAnimation:
         return self.waypoints[-1][1]
 
     def _finger_frac(self, f):
-        return _smooth((f - (GRASP_FRAME + 2)) / (ATTACH_FRAME - GRASP_FRAME))
+        if f < RELEASE_FRAME:
+            return _smooth((f - (GRASP_FRAME + 2)) / (ATTACH_FRAME - GRASP_FRAME))
+        return 1.0 - _smooth((f - RELEASE_FRAME) / 12.0)
 
     def _gait(self, f):
         if f <= WALK_FRAMES:
@@ -395,6 +430,8 @@ class G1PickupAnimation:
     def apple_position(self, f, transforms):
         if f < ATTACH_FRAME:
             return self.apple_rest
+        if f >= RELEASE_FRAME:
+            return self.drop_position
         palm = self.palm["right"]
         if not hasattr(self, "_attach_inv"):
             _, base = self.pose(ATTACH_FRAME)
@@ -464,6 +501,66 @@ class G1PickupAnimation:
                     f"Frame {f}: pelvis={np.round(targets[self.root][:3, 3], 3)} "
                     f"grasp_pt={np.round(g, 3)} apple={np.round(pos, 3)}"
                 )
+
+    def export_raw_demonstration(self, output_path, task_description):
+        """Export the authored trajectory for later G1 dataset conversion.
+
+        This intentionally records raw named joints rather than a GR00T action
+        vector. A converter must validate the Unitree joint order and pair each
+        state with a rendered camera frame before the episode is used for
+        post-training.
+        """
+        output_path = os.path.abspath(output_path)
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        joint_names = list(GROOT_FULL_BODY_JOINT_ORDER)
+        missing_joints = [name for name in joint_names if name not in self.limits]
+        if missing_joints:
+            raise RuntimeError(
+                "The G1 rig does not expose all required GR00T joints: "
+                + ", ".join(missing_joints)
+            )
+        frames = []
+        for frame in range(END_FRAME + 1):
+            state, base = self.pose(frame)
+            next_state, _ = self.pose(min(frame + 1, END_FRAME))
+            transforms = self.fk(state, base)
+            frames.append(
+                {
+                    "frame": frame,
+                    "timestamp": frame / FPS,
+                    "joint_position": [float(state.get(name, 0.0)) for name in joint_names],
+                    "next_joint_position": [
+                        float(next_state.get(name, 0.0)) for name in joint_names
+                    ],
+                    "base_position": [float(value) for value in base[:3, 3]],
+                    "apple_position": [
+                        float(value) for value in self.apple_position(frame, transforms)
+                    ],
+                }
+            )
+        episode = {
+            "schema_version": 1,
+            "recording_type": "raw_simulated_demonstration",
+            "training_ready": False,
+            "reason_not_training_ready": (
+                "Camera frames and a validated Unitree G1 joint-to-modality map "
+                "are required before GR00T LeRobot conversion."
+            ),
+            "task_description": task_description,
+            "fps": FPS,
+            "joint_names": joint_names,
+            "target_bin": "apple",
+            "target_drop_position": [float(value) for value in self.drop_position],
+            "success_frame": RELEASE_FRAME,
+            "success": True,
+            "frames": frames,
+        }
+        with open(output_path, "w", encoding="utf-8") as stream:
+            json.dump(episode, stream, separators=(",", ":"))
+        self.log(
+            f"Exported raw demonstration: {output_path} "
+            f"({len(frames)} frames, {len(joint_names)} joints)"
+        )
 
     def _palm_state_at(self, targets):
         t = targets[self.palm["right"]]

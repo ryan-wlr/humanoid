@@ -8,6 +8,6 @@ set AUTO_EXIT=0
 
 cd /d "%ISAAC_SIM_DIR%"
 set NOVA_CARTER_USD=%NOVA_CARTER_USD%
-call "%ISAAC_SIM_DIR%\kit\kit.exe" "%ISAAC_SIM_DIR%\apps\isaacsim.exp.full.kit" --/renderer/graphicsApi=Direct3D12 --/app/renderer/activeRenderer=HydraStorm --/renderer/forceRayTracing=0 --/exts/isaacsim.ros2.bridge/enabled=true --/exts/omni.isaac.ros2_bridge/enabled=true --exec "%SCRIPT_PATH%"
+call "%ISAAC_SIM_DIR%\kit\kit.exe" "%ISAAC_SIM_DIR%\apps\isaacsim.exp.full.kit" --/renderer/graphicsApi=Direct3D12 --/app/renderer/activeRenderer=HydraStorm --/renderer/forceRayTracing=0 --exec "%SCRIPT_PATH%"
 
 endlocal

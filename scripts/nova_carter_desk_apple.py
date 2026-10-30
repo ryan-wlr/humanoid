@@ -34,7 +34,7 @@ except Exception:
 
 from omni.isaac.core.utils.nucleus import get_assets_root_path
 from omni.isaac.core.utils.stage import add_reference_to_stage, open_stage
-from pxr import UsdGeom, Gf, UsdShade, Sdf, Usd
+from pxr import UsdGeom, UsdPhysics, Gf, UsdShade, Sdf, Usd
 
 
 # Helpers
@@ -78,13 +78,13 @@ def _set_display_color_recursive(prim, color: Gf.Vec3f) -> None:
         _set_display_color_recursive(child, color)
 
 
-def _bind_solid_material(prim, color: Gf.Vec3f) -> None:
+def _bind_solid_material(prim, color: Gf.Vec3f, material_name: str = "AppleMaterial") -> None:
     if not prim or not prim.IsValid():
         return
     stage = prim.GetStage()
     if stage is None:
         return
-    material_path = "/World/Materials/AppleMaterial"
+    material_path = "/World/Materials/" + material_name
     UsdGeom.Xform.Define(stage, "/World/Materials")
     material = UsdShade.Material.Define(stage, material_path)
 
@@ -189,6 +189,24 @@ def _disable_physics_recursive(prim) -> None:
         pass
     for child in prim.GetChildren():
         _disable_physics_recursive(child)
+
+
+def _remove_physics_apis_recursive(prim) -> None:
+    """Make an authored animation rig immune to live PhysX simulation."""
+    if not prim or not prim.IsValid():
+        return
+    for api in (
+        UsdPhysics.ArticulationRootAPI,
+        UsdPhysics.RigidBodyAPI,
+        UsdPhysics.CollisionAPI,
+        UsdPhysics.MassAPI,
+    ):
+        try:
+            prim.RemoveAPI(api)
+        except Exception:
+            pass
+    for child in prim.GetChildren():
+        _remove_physics_apis_recursive(child)
 
 
 def _force_visible_recursive(prim) -> None:
@@ -337,7 +355,86 @@ apple_geom = UsdGeom.Sphere.Define(stage, apple_path + "/Geom")
 apple_geom.CreateRadiusAttr(0.04)
 apple_prim = apple_xform.GetPrim()
 _set_display_color_recursive(apple_prim, Gf.Vec3f(0.85, 0.1, 0.1))
-_bind_solid_material(apple_prim, Gf.Vec3f(0.85, 0.1, 0.1))
+_bind_solid_material(apple_prim, Gf.Vec3f(0.85, 0.1, 0.1), "AppleMaterial")
+
+
+def _add_colored_cube(path: str, position, scale, color, material_name: str) -> Usd.Prim:
+    cube_xform = UsdGeom.Xform.Define(stage, path)
+    xformable = UsdGeom.Xformable(cube_xform.GetPrim())
+    xformable.AddTranslateOp().Set(Gf.Vec3d(*position))
+    xformable.AddScaleOp().Set(Gf.Vec3d(*scale))
+    cube = UsdGeom.Cube.Define(stage, path + "/Geom")
+    cube.CreateSizeAttr(1.0)
+    prim = cube_xform.GetPrim()
+    _set_display_color_recursive(prim, Gf.Vec3f(*color))
+    _bind_solid_material(prim, Gf.Vec3f(*color), material_name)
+    return prim
+
+
+def _add_sorting_bin(name: str, center, color) -> tuple:
+    """Create an open-topped bin and retain its target position for policy consumers."""
+    bin_path = "/World/SortingBins/" + name
+    UsdGeom.Xform.Define(stage, "/World/SortingBins")
+    base_height = 0.82
+    wall_height = 0.10
+    width = 0.20
+    depth = 0.18
+    thickness = 0.018
+    _add_colored_cube(
+        bin_path + "/Base", (center[0], center[1], base_height), (width, depth, thickness),
+        color, name + "BinMaterial",
+    )
+    _add_colored_cube(
+        bin_path + "/LeftWall", (center[0] - width / 2, center[1], base_height + wall_height / 2),
+        (thickness, depth, wall_height), color, name + "BinMaterial",
+    )
+    _add_colored_cube(
+        bin_path + "/RightWall", (center[0] + width / 2, center[1], base_height + wall_height / 2),
+        (thickness, depth, wall_height), color, name + "BinMaterial",
+    )
+    _add_colored_cube(
+        bin_path + "/BackWall", (center[0], center[1] + depth / 2, base_height + wall_height / 2),
+        (width, thickness, wall_height), color, name + "BinMaterial",
+    )
+    _add_colored_cube(
+        bin_path + "/FrontWall", (center[0], center[1] - depth / 2, base_height + wall_height / 2),
+        (width, thickness, wall_height), color, name + "BinMaterial",
+    )
+    bin_prim = stage.GetPrimAtPath(bin_path)
+    bin_prim.CreateAttribute("fruit_sorting:fruit", Sdf.ValueTypeNames.String).Set(name.lower())
+    bin_prim.CreateAttribute("fruit_sorting:drop_position", Sdf.ValueTypeNames.Double3).Set(
+        Gf.Vec3d(center[0], center[1], base_height + 0.04)
+    )
+    return center[0], center[1], base_height + 0.04
+
+
+APPLE_BIN_POSITION = _add_sorting_bin("Apple", (0.86, -0.18), (0.85, 0.08, 0.08))
+_add_sorting_bin("Orange", (0.86, 0.12), (0.95, 0.42, 0.04))
+_add_sorting_bin("Banana", (0.60, 0.25), (0.95, 0.82, 0.05))
+_add_sorting_bin("Lemon", (0.60, -0.42), (0.95, 0.85, 0.05))
+
+# Static distractor fruit establishes the multi-class sorting task. The red apple
+# is animated into its matching bin by the deterministic baseline policy below.
+for fruit_name, position, color, radius in (
+    ("Orange", (0.37, 0.16, 0.79), (0.95, 0.42, 0.04), 0.043),
+    ("Lemon", (0.48, -0.32, 0.79), (0.95, 0.85, 0.05), 0.036),
+):
+    fruit_xform = UsdGeom.Xform.Define(stage, "/World/Fruits/" + fruit_name)
+    UsdGeom.Xform.Define(stage, "/World/Fruits")
+    UsdGeom.Xformable(fruit_xform.GetPrim()).AddTranslateOp().Set(Gf.Vec3d(*position))
+    fruit_geom = UsdGeom.Sphere.Define(stage, "/World/Fruits/" + fruit_name + "/Geom")
+    fruit_geom.CreateRadiusAttr(radius)
+    _set_display_color_recursive(fruit_xform.GetPrim(), Gf.Vec3f(*color))
+    _bind_solid_material(fruit_xform.GetPrim(), Gf.Vec3f(*color), fruit_name + "Material")
+
+banana_prim = UsdGeom.Xform.Define(stage, "/World/Fruits/Banana").GetPrim()
+for index, offset in enumerate(((-0.04, -0.025, 0.0), (0.0, 0.0, 0.008), (0.04, 0.025, 0.0))):
+    segment = UsdGeom.Sphere.Define(stage, "/World/Fruits/Banana/Segment" + str(index))
+    segment.CreateRadiusAttr(0.027)
+    segment_xform = UsdGeom.Xformable(segment.GetPrim())
+    segment_xform.AddTranslateOp().Set(Gf.Vec3d(0.43 + offset[0], 0.34 + offset[1], 0.79 + offset[2]))
+_set_display_color_recursive(banana_prim, Gf.Vec3f(0.95, 0.82, 0.05))
+_bind_solid_material(banana_prim, Gf.Vec3f(0.95, 0.82, 0.05), "BananaMaterial")
 
 # 5. Add Unitree G1 humanoid
 g1_candidates = [
@@ -398,10 +495,17 @@ if g1_usd:
         _app_update()
     animation = g1_pickup_anim.G1PickupAnimation(
         stage, stage.GetPrimAtPath(rig_path + "/UnitreeG1"), stage.GetPrimAtPath("/World/Apple"),
-        APPLE_REST_POSITION, log=_debug_log,
+        APPLE_REST_POSITION, drop_position=APPLE_BIN_POSITION, log=_debug_log,
     )
     animation.author()
+    _remove_physics_apis_recursive(g1_prim)
     frames = g1_pickup_anim.END_FRAME
+    raw_demo_output = os.getenv("RAW_DEMO_OUTPUT")
+    if raw_demo_output:
+        animation.export_raw_demonstration(
+            raw_demo_output,
+            "pick up the apple from the table and place it in the red apple bin",
+        )
 
     _debug_log(f"Added Unitree G1 from: {g1_usd}")
 else:
